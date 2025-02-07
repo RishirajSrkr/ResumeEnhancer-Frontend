@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    img {
+      @apply inline-block;
+    }
+  }
+
+@media print{
+    #print{
+      display: block;
+    }
+    #dont-print{
+      display: none; 
+    }
+    body{
+      margin: 0;
+      padding: 0;
+      box-shadow: none;
+    }
+  }
+
+  @page{
+    size: auto;
+    margin: 0mm;
+  }
