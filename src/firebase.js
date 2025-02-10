@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc } from "firebase/firestore";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCD7UhH40k_bmDdo5zcNfay27dNDWGrD-I",
+    apiKey: `${import.meta.env.VITE_FIREBASE_KEY}`,
     authDomain: "resume-enhancer-ca860.firebaseapp.com",
     projectId: "resume-enhancer-ca860",
     storageBucket: "resume-enhancer-ca860.firebasestorage.app",
