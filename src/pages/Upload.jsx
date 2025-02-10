@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { FileText, Upload as UploadIcon, Loader2 } from 'lucide-react';
+import { FileText, Upload as UploadIcon, Loader2, Sparkles, AlertCircle } from 'lucide-react';
 import { ResumeContext } from '../context/ResumeContext';
 import axios from 'axios';
 
@@ -10,9 +10,10 @@ const Upload = () => {
     const [file, setFile] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [fileName, setFileName] = useState('');
+    const [dragActive, setDragActive] = useState(false);
 
     const { setEnhancedResumeData } = useContext(ResumeContext);
-    const [uploadProgress, setUploadProgress] = useState(0)
+    const [uploadProgress, setUploadProgress] = useState(0);
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
@@ -20,38 +21,49 @@ const Upload = () => {
         setFileName(selectedFile.name);
     };
 
+    const handleDrag = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (e.type === "dragenter" || e.type === "dragover") {
+            setDragActive(true);
+        } else if (e.type === "dragleave") {
+            setDragActive(false);
+        }
+    };
+
+    const handleDrop = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setDragActive(false);
+        
+        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+            const droppedFile = e.dataTransfer.files[0];
+            setFile(droppedFile);
+            setFileName(droppedFile.name);
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
 
         try {
-
-            const formData = new FormData;
+            const formData = new FormData();
             formData.append("jd", jobDescription);
             formData.append("file", file);
-
 
             const response = await axios.post(`http://localhost:8080/api/resume/upload`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data"
                 },
                 onUploadProgress: (progressEvent) => {
-                    const percentCompleted = Math.round((progressEvent.loaded) / (progressEvent.total) * 100)
-                    setUploadProgress(percentCompleted)
+                    const percentCompleted = Math.round((progressEvent.loaded) / (progressEvent.total) * 100);
+                    setUploadProgress(percentCompleted);
                 }
             });
 
-
-
-            const enhancedResumeData = response.data;
-
-            console.log(JSON.stringify(enhancedResumeData));
-
-            setEnhancedResumeData(enhancedResumeData)
-
-            navigate("/download")
-
-
+            setEnhancedResumeData(response.data);
+            navigate("/download");
         } catch (error) {
             console.error('Error:', error);
             setIsLoading(false);
@@ -59,89 +71,145 @@ const Upload = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
-            <div className="container mx-auto px-4 py-16 max-w-3xl">
-                <div className="flex items-center gap-2 mb-8">
-                    <FileText className="w-8 h-8 text-blue-600" />
-                    <h1 className="text-2xl font-bold text-gray-900">Upload Your Details</h1>
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+            <div className="container mx-auto px-4 py-12 max-w-4xl">
+                {/* Header Section */}
+                <div className="text-center mb-12">
+                    <div className="inline-flex items-center justify-center p-2 bg-blue-100 rounded-full mb-4">
+                        <Sparkles className="w-6 h-6 text-blue-600" />
+                    </div>
+                    <h1 className="text-4xl font-bold text-gray-900 mb-4">
+                        Optimize Your Resume
+                    </h1>
+                    <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                        Transform your resume to perfectly match your dream job. Our AI-powered tool
+                        analyzes job descriptions and optimizes your resume for maximum impact.
+                    </p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    {/* Job Description Input */}
-                    <div>
-                        <label htmlFor="jobDescription" className="block text-sm font-medium text-gray-700 mb-2">
-                            Job Description
-                        </label>
-                        <textarea
-                            id="jobDescription"
-                            value={jobDescription}
-                            onChange={(e) => setJobDescription(e.target.value)}
-                            className="w-full h-48 px-4 py-3 rounded-lg border outline-none border-gray-200 focus:border-blue-500  transition-colors resize-none"
-                            placeholder="Paste the job description here..."
-                            required
-                        />
-                    </div>
-
-                    {/* Resume Upload */}
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Current Resume
-                        </label>
-                        <div className="relative">
-                            <input
-                                type="file"
-                                onChange={handleFileChange}
-                                className="hidden"
-                                id="resume"
-                                accept=".pdf,.doc,.docx"
-                                required
-                            />
-                            <label
-                                htmlFor="resume"
-                                className="flex items-center justify-center w-full px-4 py-6 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 transition-colors cursor-pointer"
-                            >
-                                <div className="text-center">
-                                    <UploadIcon className="mx-auto h-8 w-8 text-gray-400 mb-2" />
-                                    {fileName ? (
-                                        <span className="text-sm text-gray-900">{fileName}</span>
-                                    ) : (
-                                        <>
-                                            <span className="text-blue-600 font-medium">Click to upload</span>
-                                            <span className="text-gray-500"> or drag and drop</span>
-                                            <p className="text-xs text-gray-500 mt-1">PDF, DOC, or DOCX (max 10MB)</p>
-                                        </>
-                                    )}
-                                </div>
+                <div className="">
+                    <form onSubmit={handleSubmit} className="space-y-8">
+                       
+                       <div className='flex w-full gap-8'>
+                         {/* Job Description Input */}
+                         <div className='w-2/3'>
+                            <label htmlFor="jobDescription" className="block text-lg font-semibold text-gray-800 mb-3">
+                                Job Description
                             </label>
+                            <div className="relative">
+                                <textarea
+                                    id="jobDescription"
+                                    value={jobDescription}
+                                    onChange={(e) => setJobDescription(e.target.value)}
+                                    className="w-full h-48 px-4 py-3 rounded-xl border-2 outline-none border-gray-200 focus:border-blue-500 transition-colors resize-none bg-gray-50 focus:bg-white"
+                                    placeholder="Paste the job description here..."
+                                    required
+                                />
+                                <div className="absolute top-3 right-3">
+                                    <FileText className="w-5 h-5 text-gray-400" />
+                                </div>
+                            </div>
                         </div>
-                    </div>
 
-                    {/* Submit Button */}
-                    <button
-                        type="submit"
-                        disabled={isLoading}
-                        className="w-full py-4 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                        {isLoading ? (
-                            <>
-                                <Loader2 className="w-5 h-5 animate-spin" />
-                                Generating Resume...
-                            </>
-                        ) : (
-                            'Generate Optimized Resume'
+                        {/* Resume Upload */}
+                        <div>
+                            <label className="block text-lg font-semibold text-gray-800 mb-3">
+                                Upload Your Resume
+                            </label>
+                            <div className="relative">
+                                <input
+                                    type="file"
+                                    onChange={handleFileChange}
+                                    className="hidden"
+                                    id="resume"
+                                    accept=".pdf,.doc,.docx"
+                                    required
+                                />
+                                <label
+                                    htmlFor="resume"
+                                    className={`flex flex-col items-center justify-center  px-4 py-8 w-64 h-48 border-2 border-dashed rounded-xl cursor-pointer transition-all duration-200 ${
+                                        dragActive 
+                                            ? 'border-blue-500 bg-blue-50' 
+                                            : 'border-gray-300 hover:border-blue-500 hover:bg-gray-50'
+                                    }`}
+                                    onDragEnter={handleDrag}
+                                    onDragLeave={handleDrag}
+                                    onDragOver={handleDrag}
+                                    onDrop={handleDrop}
+                                >
+                                    <div className="text-center">
+                                        {fileName ? (
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-xs font-medium text-gray-900">{fileName}</span>
+                                            </div>
+                                        ) : (
+                                            <>
+                                                <UploadIcon className="mx-auto h-8 w-8 text-gray-400 mb-4" />
+                                                <div className="space-y-2">
+                                                    <p className="text-lg font-medium text-blue-600">
+                                                        Drop your resume here
+                                                    </p>
+                                                    <p className="text-sm text-gray-500">
+                                                        or <span className="text-blue-600">browse</span> to choose a file
+                                                    </p>
+                                                </div>
+                                                <p className="text-xs text-gray-400 mt-4">
+                                                    Supports PDF, DOC, or DOCX (max 10MB)
+                                                </p>
+                                            </>
+                                        )}
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                       </div>
+
+                        {/* Submit Button */}
+                        <button
+                            type="submit"
+                            disabled={isLoading}
+                            className="w-full py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-medium hover:from-blue-700 hover:to-blue-800 transition-all duration-200 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-blue-500/30 hover:shadow-blue-500/40"
+                        >
+                            {isLoading ? (
+                                <>
+                                    <Loader2 className="w-5 h-5 animate-spin" />
+                                    Optimizing Your Resume...
+                                </>
+                            ) : (
+                                <>
+                                    <Sparkles className="w-5 h-5" />
+                                    Generate Optimized Resume
+                                </>
+                            )}
+                        </button>
+
+                        {isLoading && (
+                            <div className="space-y-3">
+                                <div className="w-full bg-gray-200 rounded-full h-2">
+                                    <div 
+                                        className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                                        style={{ width: `${uploadProgress}%` }}
+                                    />
+                                </div>
+                                <p className="text-sm text-center text-gray-600">
+                                    {uploadProgress < 100 
+                                        ? `Uploading: ${uploadProgress}%`
+                                        : 'Processing your resume...'}
+                                </p>
+                            </div>
                         )}
-                    </button>
 
-                    {isLoading && (
-                        <div className="w-full space-y-2">
-                            <p className="text-sm text-center text-gray-500 dark:text-gray-400">
-                                Uploading: {uploadProgress}%
+                        {/* Info Section */}
+                        <div className="flex items-start gap-3 p-4 bg-blue-50 rounded-lg">
+                            <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                            <p className="text-sm text-blue-700">
+                                Our AI will analyze your resume against the job description and suggest optimizations 
+                                to increase your chances of landing an interview. Your data is processed securely 
+                                and confidentially.
                             </p>
                         </div>
-                    )}
-
-
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     );

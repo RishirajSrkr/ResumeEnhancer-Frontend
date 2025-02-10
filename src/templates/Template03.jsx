@@ -1,215 +1,182 @@
 import React, { useContext } from 'react';
 import { ResumeContext } from '../context/ResumeContext';
-import { 
-  RiMailLine, 
-  RiPhoneLine, 
-  RiGithubLine, 
-  RiLinkedinBoxLine,
-  RiExternalLinkLine,
-  RiCodeSSlashLine,
-  RiUserLine,
-  RiBuilding4Line,
-  RiCalendarLine,
-  RiGraduationCapLine,
-  RiMedalLine,
-  RiTerminalBoxLine,
-  RiBriefcase2Line
-} from 'react-icons/ri';
+import { Mail, Phone, Github, Linkedin, MapPin, Calendar, Globe, SquareArrowOutUpRight } from 'lucide-react';
+import { div } from 'framer-motion/client';
 
-const ModernTemplate = () => {
-  const { enhancedResumeData: data } = useContext(ResumeContext);
-
-  const handleSaveAsPdf = () => {
-    window.print();
-  };
+const ATSTemplate = ( {data}) => {
 
   return (
-    <>
-      <div className="w-[210mm] h-[297mm] bg-white mx-auto shadow-lg relative print:shadow-none overflow-hidden">
-        {/* Header - Compact design */}
-        <div className="bg-blue-600 text-white py-6 px-8">
-          <h1 className="text-3xl font-bold mb-2">{data.name}</h1>
-          <div className="flex flex-wrap gap-4 text-sm">
-            <div className="flex items-center gap-1">
-              <RiMailLine className="text-blue-200" />
-              <a href={`mailto:${data.contact.email}`} className="hover:text-blue-200">
+
+
+    <div className='w-full  p-12 print:p-0'>
+      <div className="w-[210mm] min-h-[297mm] mx-auto bg-white px-12 py-8  border  print:shadow-none font-sans text-gray-900">
+        {/* Header Section - Centered */}
+        <header className="mb-6 text-center">
+          <h1 className="text-3xl font-bold text-gray-900 mb-3">{data.name}</h1>
+          <div className="flex flex-wrap justify-center gap-6 text-sm text-gray-700">
+            {data.contact.email && (
+              <a href={`mailto:${data.contact.email}`} className="flex items-center gap-1.5">
+                <Mail className="w-4 h-4" />
                 {data.contact.email}
               </a>
-            </div>
+            )}
             {data.contact.phone && (
-              <div className="flex items-center gap-1">
-                <RiPhoneLine className="text-blue-200" />
+              <span className="flex items-center gap-1.5">
+                <Phone className="w-4 h-4" />
                 {data.contact.phone}
-              </div>
+              </span>
+            )}
+            {data.contact.location && (
+              <span className="flex items-center gap-1.5">
+                <MapPin className="w-4 h-4" />
+                {data.contact.location}
+              </span>
+            )}
+            {data.contact.github && (
+              <a href={data.contact.github} className="flex items-center gap-1.5" target="_blank" rel="noopener noreferrer">
+                <Github className="w-4 h-4" />
+                GitHub
+              </a>
             )}
             {data.contact.linkedin && (
-              <div className="flex items-center gap-1">
-                <RiLinkedinBoxLine className="text-blue-200" />
-                <a href={data.contact.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-blue-200">
-                  LinkedIn
-                </a>
-              </div>
+              <a href={data.contact.linkedin} className="flex items-center gap-1.5" target="_blank" rel="noopener noreferrer">
+                <Linkedin className="w-4 h-4" />
+                LinkedIn
+              </a>
             )}
           </div>
-        </div>
+        </header>
 
-        <div className="p-8 max-h-[calc(297mm-8rem)] overflow-y-auto">
-          {/* Summary */}
-          <div className="mb-6">
-            <div className="flex items-center gap-2 mb-2">
-              <RiUserLine className="text-blue-600 text-lg" />
-              <h2 className="text-lg font-semibold text-gray-800">Professional Summary</h2>
-            </div>
-            <p className="text-sm text-gray-700 leading-relaxed">{data.objective}</p>
-          </div>
+        {/* Professional Summary */}
+        {data.objective && (
+          <section className="mb-6">
+            <h2 className="text-lg font-bold text-gray-900 mb-2 pb-1 border-b border-gray-300">Professional Summary</h2>
+            <p className="text-sm leading-relaxed text-gray-800">{data.objective}</p>
+          </section>
+        )}
 
-          {/* Skills */}
-          <div className="mb-6">
-            <div className="flex items-center gap-2 mb-3">
-              <RiTerminalBoxLine className="text-blue-600 text-lg" />
-              <h2 className="text-lg font-semibold text-gray-800">Technical Skills</h2>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {data.skills.map((skill, index) => (
-                <span
-                  key={index}
-                  className="px-3 py-1 bg-gray-100 text-gray-700 rounded text-sm"
-                >
-                  {skill}
+        {/* Technical Skills */}
+        <section className="mb-6">
+          <h2 className="text-lg font-bold text-gray-900 mb-2 pb-1 border-b border-gray-300">Technical Skills</h2>
+          <div className="grid grid-cols-1 gap-1 text-sm">
+            {Object.entries(data.skillsByCategory || {}).map(([category, skills]) => (
+              <div key={category} className="flex items-start">
+                <span className="font-bold text-gray-700 w-60">{category}:</span>
+                <span className="text-gray-800 flex-1">
+                  {Array.isArray(skills) ? skills.map((skill, index) => (
+                    <React.Fragment key={skill}>
+                      <span className="font-medium">{skill}</span>
+                      {index < skills.length - 1 && <span className="text-gray-400 mx-1.5">•</span>}
+                    </React.Fragment>
+                  )) : skills}
                 </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Projects */}
-          <div className="mb-6">
-            <div className="flex items-center gap-2 mb-3">
-              <RiCodeSSlashLine className="text-blue-600 text-lg" />
-              <h2 className="text-lg font-semibold text-gray-800">Technical Projects</h2>
-            </div>
-            <div className="space-y-4">
-              {data.projects.slice(0, 3).map((project, index) => (
-                <div key={index} className="border-l-2 border-blue-200 pl-4">
-                  <div className="flex justify-between items-start">
-                    <h3 className="font-medium text-gray-800 text-base">{project.title}</h3>
-                    <div className="flex gap-2">
-                      {project.link && (
-                        <a
-                          href={project.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600"
-                        >
-                          <RiExternalLinkLine size={14} />
-                        </a>
-                      )}
-                      {project.githubLink && (
-                        <a
-                          href={project.githubLink}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-gray-600"
-                        >
-                          <RiGithubLine size={14} />
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                  <p className="text-sm text-gray-600 my-1 line-clamp-2">{project.description}</p>
-                  <div className="flex flex-wrap gap-2">
-                    {project.tech_stack.map((tech, i) => (
-                      <span key={i} className="text-sm text-gray-500">
-                        {i > 0 && "•"} {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Experience */}
-          {data.workExperience?.length > 0 && (
-            <div className="mb-6">
-              <div className="flex items-center gap-2 mb-3">
-                <RiBriefcase2Line className="text-blue-600 text-lg" />
-                <h2 className="text-lg font-semibold text-gray-800">Professional Experience</h2>
               </div>
-              <div className="space-y-4">
-                {data.workExperience.map((exp, index) => (
-                  <div key={index} className="border-l-2 border-blue-200 pl-4">
-                    <div className="flex justify-between mb-1">
-                      <div>
-                        <div className="font-medium text-gray-800 text-base flex items-center gap-1">
-                          <RiBuilding4Line className="text-gray-500" size={14} />
-                          {exp.title} at {exp.company}
-                        </div>
-                        <div className="text-sm text-gray-600 flex items-center gap-1">
-                          <RiCalendarLine className="text-gray-500" size={14} />
-                          {exp.period}
-                        </div>
-                      </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Professional Experience */}
+        {data.workExperience && (
+          <section className="mb-6">
+            <h2 className="text-lg font-bold text-gray-900 mb-2 pb-1 border-b border-gray-300">Professional Experience</h2>
+            <div className="space-y-4">
+              {data.workExperience.map((exp, index) => (
+                <div key={index}>
+                  <div className="mb-1">
+                    <div className="flex justify-between items-baseline">
+                      <h3 className="text-base font-bold text-gray-900">{exp.title}</h3>
+                      <span className="text-sm text-gray-600 flex items-center gap-1">
+                        {exp.duration}
+                      </span>
                     </div>
-                    <ul className="list-disc pl-4 text-sm text-gray-600 mt-2 space-y-1">
-                      {exp.responsibilities.slice(0, 3).map((responsibility, i) => (
-                        <li key={i}>{responsibility}</li>
+                    <div className="flex items-center gap-2 text-sm text-gray-700 mb-2">
+                      <Globe className="w-2.5 h-2.5" />
+                      <span className="italic font-medium">{exp.company}</span>
+                      {exp.location && (
+                        <>
+                          <span className="text-gray-400">•</span>
+                          <span>{exp.location}</span>
+                        </>
+                      )}
+                    </div>
+                    <ul className="list-disc ml-4 space-y-1">
+                      {exp.responsibilities.map((item, i) => (
+                        <li key={i} className="text-sm text-gray-800 leading-relaxed">
+                          {item.split(/\b/).map((word, j) => {
+                            const isImportant = /^(developed|designed|implemented|managed|led|created|optimized|improved|reduced|increased|achieved|deployed|architected|built|scaled|mentored)\b/i.test(word);
+                            return isImportant ?
+                              <span key={j} className="font-medium">{word}</span> :
+                              <span key={j}>{word}</span>
+                          })}
+                        </li>
                       ))}
                     </ul>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
-          )}
+          </section>
+        )}
 
-          <div className="grid grid-cols-2 gap-6">
-            {/* Education */}
-            <div>
-              <div className="flex items-center gap-2 mb-3">
-                <RiGraduationCapLine className="text-blue-600 text-lg" />
-                <h2 className="text-lg font-semibold text-gray-800">Education</h2>
-              </div>
-              <div className="border-l-2 border-blue-200 pl-4">
-                <div className="font-medium text-gray-800 text-base">
-                  {data.education.degree} {data.education.branch && `in ${data.education.branch}`}
+        {/* Technical Projects */}
+        <section className="mb-6">
+          <h2 className="text-lg font-bold text-gray-900 mb-2 pb-1 border-b border-gray-300">Technical Projects</h2>
+          <div className="space-y-4">
+            {data.projects.map((project, index) => (
+              <div key={index} className="mb-4">
+                <div className="flex justify-between items-baseline mb-2">
+                  <h3 className="text-base font-bold text-gray-900">{project.title}</h3>
+                  <div className="flex gap-4">
+                    {project.githubLink && (
+                      <a href={project.githubLink} target="_blank" rel="noopener noreferrer"
+                        className="text-gray-600 flex items-center gap-1">
+                        <Github className="w-2.5 h-2.5" />
+                        <span className="text-sm">Code</span>
+                      </a>
+                    )}
+                    {project.link && (
+                      <a href={project.link} target="_blank" rel="noopener noreferrer"
+                        className="text-gray-600 flex items-center gap-1">
+                        <SquareArrowOutUpRight className="w-2.5 h-2.5" />
+                        <span className="text-sm">View</span>
+                      </a>
+                    )}
+                  </div>
                 </div>
-                <div className="text-sm text-gray-600">{data.education.institution}</div>
-                <div className="text-sm text-gray-500">
-                  {data.education.year}
-                  {data.education.cgpa && ` • CGPA: ${data.education.cgpa}`}
-                </div>
-              </div>
-            </div>
-
-            {/* Achievements */}
-            {data.achievements?.length > 0 && (
-              <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <RiMedalLine className="text-blue-600 text-lg" />
-                  <h2 className="text-lg font-semibold text-gray-800">Achievements</h2>
-                </div>
-                <div className="border-l-2 border-blue-200 pl-4">
-                  <ul className="list-disc pl-4 text-sm text-gray-600 space-y-1">
-                    {data.achievements.slice(0, 3).map((achievement, index) => (
-                      <li key={index}>{achievement}</li>
+                <p className="text-sm text-gray-800 mb-2">{project.description}</p>
+                {project.technologies && (
+                  <div className="flex flex-wrap gap-2">
+                    {project.technologies.map((tech, i) => (
+                      <span key={i} className="px-2 py-1 bg-gray-50 text-sm font-medium text-gray-700">
+                        {tech}
+                      </span>
                     ))}
-                  </ul>
-                </div>
+                  </div>
+                )}
               </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Education */}
+        <section>
+          <h2 className="text-lg font-bold text-gray-900 mb-2 pb-1 border-b border-gray-300">Education</h2>
+          <div>
+            <div className="flex justify-between items-baseline mb-1">
+              <h3 className="text-base font-bold text-gray-900">
+                {data.education.degree} {data.education.branch && <span className="italic">{`in ${data.education.branch}`}</span>}
+              </h3>
+              <span className="text-sm text-gray-600">{data.education.year}</span>
+            </div>
+            <p className="text-sm text-gray-800 italic mb-1">{data.education.institution}</p>
+            {data.education.cgpa && (
+              <p className="text-sm text-gray-700">CGPA: <span className="font-medium">{data.education.cgpa}</span></p>
             )}
           </div>
-        </div>
+        </section>
       </div>
-
-      <div className="my-4 text-center print:hidden">
-        <button
-          onClick={handleSaveAsPdf}
-          className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
-        >
-          Save as PDF
-        </button>
-      </div>
-    </>
+    </div>
   );
 };
 
-export default ModernTemplate;
+export default ATSTemplate;

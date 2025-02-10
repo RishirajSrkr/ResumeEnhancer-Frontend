@@ -15,7 +15,7 @@ const ATSTemplate = () => {
 
   return (
 
-    <div className="w-[210mm] min-h-[297mm] mx-auto bg-white p-10 shadow-lg print:shadow-none">
+    <div className="w-[210mm] min-h-[297mm] mx-auto bg-white p-10 shadow-lg print:shadow-none font-serif">
       <header className="space-y-2 mb-4 border-b pb-4">
 
       <h1 className="text-2xl font-bold tracking-tight text-gray-900">{data.name}</h1>

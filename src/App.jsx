@@ -1,11 +1,10 @@
 import React from 'react';
 import './App.css'
 import { Routes, Route } from 'react-router';
-import Template02 from './templates/Template02';
-import Template03 from './templates/Template03';
-import Template04 from './templates/Template04';
+import ShareablePortfolioTemplate from './templates/ShareablePortfolioTemplate';
 import LandingPage from './pages/LandingPage';
 import Upload from './pages/Upload';
+import DownloadPage from './pages/DownloadPage';
 const App = () => {
 
 
@@ -13,9 +12,12 @@ const App = () => {
     <Routes>
       <Route path='/' element={<LandingPage />} />
       <Route path='/upload' element={<Upload />} />
-      <Route path='/download' element={<Template02 />}/>
+      {/* <Route path='/download' element={<Template02 />}/> */}
       {/* <Route path='/download' element={<Template03 />}/> */}
+      <Route path='/download' element={<DownloadPage />}/>
       {/* <Route path='/download' element={<Template04 />}/> */}
+
+      <Route path='/:username' element={<ShareablePortfolioTemplate/>} />
     </Routes>
   );
 };
