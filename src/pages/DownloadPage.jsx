@@ -65,6 +65,27 @@ function DownloadPage() {
         setIsSidebarOpen(!isSidebarOpen);
     };
 
+    const ActionButton = ({ className = '' }) => (
+        <button
+            onClick={handleButtonClick}
+            className={`flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors ${className}`}
+        >
+            {selectedTemplate == "portfolioResumeTemplate" ? (
+                <span className='flex gap-2 items-center'>
+                    {isSaving ? "Preparing..." : (
+                        <span className='flex items-center gap-2'>
+                            <RiShareForwardFill size={16} /> Get Shareable Link
+                        </span>
+                    )}
+                </span>
+            ) : (
+                <span className='flex gap-1 items-center'>
+                    <RiFileDownloadLine size={16} /> Download PDF
+                </span>
+            )}
+        </button>
+    );
+
     return (
         <div className='min-h-screen bg-gray-50'>
             {/* Mobile Header */}
@@ -87,19 +108,24 @@ function DownloadPage() {
                 <div className='flex-grow bg-white order-2 lg:order-1'>
                     <div className='mx-auto max-w-full overflow-x-auto'>
                         {templates.find(template => template.id === selectedTemplate)?.component}
+                        
+                        {/* Mobile Download Button */}
+                        <div className='lg:hidden p-4 sticky bottom-0 bg-white border-t shadow-lg'>
+                            <ActionButton className='w-full' />
+                        </div>
                     </div>
                 </div>
 
                 {/* Template Selection Sidebar */}
                 <div className={`
                     w-full lg:w-80 flex-shrink-0 print:hidden bg-white lg:bg-transparent
-                    fixed lg:relative inset-0 z-40 lg:z-auto
+                    fixed lg:relative inset-0 z-40 lg:z-auto order-1 lg:order-2
                     transform transition-transform duration-300 ease-in-out
                     ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
                 `}>
                     <div className='h-full lg:h-auto overflow-y-auto lg:overflow-visible p-4 lg:p-6 lg:sticky lg:top-6'>
                         {/* Header */}
-                        <div className='mb-6'>
+                        <div className='mb-6 mt-16 lg:mt-0'>
                             <h2 className='text-xl font-semibold text-gray-800'>Choose Template</h2>
                             <p className='text-sm text-gray-500 mt-1'>Select the perfect design for your resume</p>
                         </div>
@@ -135,29 +161,9 @@ function DownloadPage() {
                             ))}
                         </div>
 
-                        {/* Action Buttons */}
-                        <div className='mt-6 space-y-3'>
-                            <button
-                                onClick={() => {
-                                    handleButtonClick();
-                                    setIsSidebarOpen(false);
-                                }}
-                                className='w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors'
-                            >
-                                {selectedTemplate == "portfolioResumeTemplate" ? (
-                                    <span className='flex gap-2 items-center'>
-                                        {isSaving ? "Preparing..." : (
-                                            <span className='flex items-center gap-2'>
-                                                <RiShareForwardFill size={16} /> Get Shareable Link
-                                            </span>
-                                        )}
-                                    </span>
-                                ) : (
-                                    <span className='flex gap-1 items-center'>
-                                        <RiFileDownloadLine size={16} /> Download PDF
-                                    </span>
-                                )}
-                            </button>
+                        {/* Action Buttons - Desktop Only */}
+                        <div className='mt-6 space-y-3 hidden lg:block'>
+                            <ActionButton className='w-full' />
                         </div>
                     </div>
                 </div>
@@ -175,3 +181,5 @@ function DownloadPage() {
 }
 
 export default DownloadPage;
+
+
