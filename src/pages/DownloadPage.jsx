@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Layout, Eye, Download, Check } from 'lucide-react';
+import { Layout, Eye, Download, Check, Menu, X } from 'lucide-react';
 import { RiFileDownloadLine } from "react-icons/ri";
 import { RiShareForwardFill } from "react-icons/ri";
 import Template03 from '../templates/Template03';
@@ -12,21 +12,18 @@ import { saveResume } from '../utilities/saveResumeToDb'
 function DownloadPage() {
     const [selectedTemplate, setSelectedTemplate] = useState("templateThree");
     const { enhancedResumeData: data } = useContext(ResumeContext);
-    const [isSaving, setIsSaving] = useState(false)
-
+    const [isSaving, setIsSaving] = useState(false);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     const templates = [
         { id: "templateThree", name: "Professional", component: <Template03 data={data} />, description: "Sleek, ATS-friendly design for corporate roles." },
         { id: "templateFive", name: "Creative", component: <Template05 data={data} />, description: "Bold, eye-catching layout for creative fields." },
         { id: "portfolioResumeTemplate", name: "Digital Portfolio", component: <ShareablePortfolioTemplate />, description: "Live, shareable resume with a portfolio touch." }
-
     ];
-
 
     async function handleButtonClick() {
         const userName = data?.name + '_' + Date.now();
         if (selectedTemplate == "portfolioResumeTemplate") {
-
             const resumeId = await handleSaveToDb(userName, data);
 
             if (resumeId) {
@@ -42,7 +39,7 @@ function DownloadPage() {
             document.title = userName;
             window.print();
             setTimeout(() => {
-                document.title = originalTitle; // Restore original title after printing
+                document.title = originalTitle;
             }, 1000);
         }
     }
@@ -64,20 +61,43 @@ function DownloadPage() {
         return null;
     }
 
+    const toggleSidebar = () => {
+        setIsSidebarOpen(!isSidebarOpen);
+    };
 
     return (
         <div className='min-h-screen bg-gray-50'>
-            <div className='max-w-[1600px] mx-auto  flex'>
+            {/* Mobile Header */}
+            <div className='lg:hidden bg-white border-b px-4 py-3 sticky top-0 z-50 flex items-center justify-between'>
+                <h1 className='font-semibold text-gray-800'>Resume Templates</h1>
+                <button 
+                    onClick={toggleSidebar}
+                    className='p-2 hover:bg-gray-100 rounded-lg transition-colors'
+                >
+                    {isSidebarOpen ? (
+                        <X className='w-5 h-5 text-gray-600' />
+                    ) : (
+                        <Menu className='w-5 h-5 text-gray-600' />
+                    )}
+                </button>
+            </div>
+
+            <div className='max-w-[1600px] mx-auto flex flex-col lg:flex-row relative'>
                 {/* Preview Area */}
-                <div className='flex-grow bg-white'>
-                    <div className='mx-auto'>
+                <div className='flex-grow bg-white order-2 lg:order-1'>
+                    <div className='mx-auto max-w-full overflow-x-auto'>
                         {templates.find(template => template.id === selectedTemplate)?.component}
                     </div>
                 </div>
 
                 {/* Template Selection Sidebar */}
-                <div className='w-80 flex-shrink-0 print:hidden p-6'>
-                    <div className='sticky top-6'>
+                <div className={`
+                    w-full lg:w-80 flex-shrink-0 print:hidden bg-white lg:bg-transparent
+                    fixed lg:relative inset-0 z-40 lg:z-auto
+                    transform transition-transform duration-300 ease-in-out
+                    ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+                `}>
+                    <div className='h-full lg:h-auto overflow-y-auto lg:overflow-visible p-4 lg:p-6 lg:sticky lg:top-6'>
                         {/* Header */}
                         <div className='mb-6'>
                             <h2 className='text-xl font-semibold text-gray-800'>Choose Template</h2>
@@ -85,11 +105,14 @@ function DownloadPage() {
                         </div>
 
                         {/* Template List */}
-                        <div className='space-y-3 '>
+                        <div className='space-y-3'>
                             {templates.map((template) => (
                                 <button
                                     key={template.id}
-                                    onClick={() => setSelectedTemplate(template.id)}
+                                    onClick={() => {
+                                        setSelectedTemplate(template.id);
+                                        setIsSidebarOpen(false);
+                                    }}
                                     className={`w-full text-left p-4 rounded-lg border transition-all duration-200 group
                                         ${selectedTemplate === template.id
                                             ? 'border-blue-500 bg-blue-50/50'
@@ -113,24 +136,39 @@ function DownloadPage() {
                         </div>
 
                         {/* Action Buttons */}
-                        <div className='mt-6 space-y-3 '>
+                        <div className='mt-6 space-y-3'>
                             <button
-                                onClick={handleButtonClick}
+                                onClick={() => {
+                                    handleButtonClick();
+                                    setIsSidebarOpen(false);
+                                }}
                                 className='w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors'
                             >
-
-                                {selectedTemplate == "portfolioResumeTemplate" ?
+                                {selectedTemplate == "portfolioResumeTemplate" ? (
                                     <span className='flex gap-2 items-center'>
-                                        {isSaving ? "Preparing..." : <span className='flex items-center gap-2'><RiShareForwardFill size={16} /> Get Shareable Link</span>}
-                                    </span> :
-                                    <span className='flex gap-1 items-center'>
-                                        <RiFileDownloadLine size={16} />  Download PDF
+                                        {isSaving ? "Preparing..." : (
+                                            <span className='flex items-center gap-2'>
+                                                <RiShareForwardFill size={16} /> Get Shareable Link
+                                            </span>
+                                        )}
                                     </span>
-                                }
+                                ) : (
+                                    <span className='flex gap-1 items-center'>
+                                        <RiFileDownloadLine size={16} /> Download PDF
+                                    </span>
+                                )}
                             </button>
                         </div>
                     </div>
                 </div>
+
+                {/* Overlay for mobile sidebar */}
+                {isSidebarOpen && (
+                    <div 
+                        className='fixed inset-0 bg-black/20 z-30 lg:hidden'
+                        onClick={() => setIsSidebarOpen(false)}
+                    />
+                )}
             </div>
         </div>
     );

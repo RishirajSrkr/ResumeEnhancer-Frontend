@@ -43,12 +43,11 @@ const ShareablePortfolioTemplate = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100 relative overflow-hidden md:px-60">
-      <div className="fixed inset-0 grid-pattern opacity-20"></div>
+    <div className="min-h-screen bg-gray-900 text-gray-100 relative overflow-hidden">
       
       {/* Hero Section */}
       <section className="relative pt-16 md:pt-20 pb-12 md:pb-16 overflow-hidden px-4 sm:px-6 lg:px-8">
-        <div className="max-w-[90rem] mx-auto">
+        <div className="max-w-[60rem] mx-auto">
           <motion.div
             initial="hidden"
             animate="visible"
@@ -72,7 +71,7 @@ const ShareablePortfolioTemplate = () => {
             </div>
 
             {/* Contact Links */}
-            <div className="w-full lg:w-2/5 flex flex-col gap-3 sm:gap-2 md:translate-y-4">
+            <div className="w-full lg:w-2/5 flex flex-col sm:gap-2">
               {fetchedResumeData?.contact.email && (
                 <motion.a
                   href={`mailto:${fetchedResumeData?.contact.email}`}
@@ -118,7 +117,7 @@ const ShareablePortfolioTemplate = () => {
         </div>
       </section>
 
-      <div className="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 space-y-16 md:space-y-24">
+      <div className="max-w-[60rem] mx-auto px-4 sm:px-6 lg:px-5 py-12 md:py-16 space-y-16 md:space-y-24">
         {/* Skills Section */}
         <section>
           <motion.div

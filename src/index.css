@@ -2,12 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-    img {
-      @apply inline-block;
-    }
-  }
-
 @media print{
     #print{
       display: block;
@@ -26,3 +20,7 @@
     size: auto;
     margin: 0mm;
   }
+
+  
+
+  
