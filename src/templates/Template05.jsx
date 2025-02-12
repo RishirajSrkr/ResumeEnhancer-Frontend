@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import { ResumeContext } from '../context/ResumeContext';
-import { Mail, Phone, Github, Linkedin, Calendar, MapPin,SquareArrowOutUpRight } from 'lucide-react';
+import { Mail, Phone, Github, Linkedin, Calendar, MapPin, SquareArrowOutUpRight } from 'lucide-react';
 
-const MinimalTemplate = ({data}) => {
+const MinimalTemplate = ({ data }) => {
 
   return (
     <div className="w-full p-12 print:p-0">
@@ -66,6 +66,9 @@ const MinimalTemplate = ({data}) => {
                 <p className="text-sm">{data.education.year}</p>
                 {data.education.cgpa && (
                   <p className="text-sm mt-1">CGPA: {data.education.cgpa}</p>
+                )}
+                {data.education.percentage && (
+                  <p className="text-sm mt-1">Percentage: {data.education.percentage}</p>
                 )}
               </div>
             </section>

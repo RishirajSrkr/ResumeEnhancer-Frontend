@@ -172,6 +172,9 @@ const ATSTemplate = ( {data}) => {
             {data.education.cgpa && (
               <p className="text-sm text-gray-700">CGPA: <span className="font-medium">{data.education.cgpa}</span></p>
             )}
+            {data.education.percentage && (
+              <p className="text-sm text-gray-700">Percentage: <span className="font-medium">{data.education.percentage}</span></p>
+            )}
           </div>
         </section>
       </div>

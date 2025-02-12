@@ -44,7 +44,7 @@ const ShareablePortfolioTemplate = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 relative overflow-hidden">
-      
+
       {/* Hero Section */}
       <section className="relative pt-16 md:pt-20 pb-12 md:pb-16 overflow-hidden px-4 sm:px-6 lg:px-8">
         <div className="max-w-[60rem] mx-auto">
@@ -317,6 +317,9 @@ const ShareablePortfolioTemplate = () => {
                     <span className="text-blue-400 font-mono">{fetchedResumeData?.education.year}</span>
                     {fetchedResumeData?.education.cgpa && (
                       <p className="text-gray-400 text-sm mt-1">CGPA: {fetchedResumeData.education.cgpa}</p>
+                    )}
+                    {data.education.percentage && (
+                      <p className="text-gray-400 text-sm mt-1">Percentage: {data.education.percentage}</p>
                     )}
                   </div>
                 </div>

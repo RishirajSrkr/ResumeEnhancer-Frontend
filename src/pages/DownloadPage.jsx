@@ -89,7 +89,7 @@ function DownloadPage() {
     return (
         <div className='min-h-screen bg-gray-50'>
             {/* Mobile Header */}
-            <div className='lg:hidden bg-white border-b px-4 py-3 sticky top-0 z-50 flex items-center justify-between'>
+            <div className='lg:hidden bg-white border-b px-4 py-3 sticky top-0 z-50 flex items-center justify-between print:hidden'>
                 <h1 className='font-semibold text-gray-800'>Resume Templates</h1>
                 <button 
                     onClick={toggleSidebar}
@@ -110,7 +110,7 @@ function DownloadPage() {
                         {templates.find(template => template.id === selectedTemplate)?.component}
                         
                         {/* Mobile Download Button */}
-                        <div className='lg:hidden p-4 sticky bottom-0 bg-white border-t shadow-lg'>
+                        <div className='lg:hidden p-4 sticky bottom-0 bg-white border-t shadow-lg print:hidden'>
                             <ActionButton className='w-full' />
                         </div>
                     </div>
