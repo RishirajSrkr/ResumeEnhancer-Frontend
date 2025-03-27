@@ -52,7 +52,7 @@ const Upload = () => {
             formData.append("jd", jobDescription);
             formData.append("file", file);
 
-            const response = await axios.post(`http://localhost:8080/api/resume/upload`, formData, {
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/resume/upload`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data"
                 },
