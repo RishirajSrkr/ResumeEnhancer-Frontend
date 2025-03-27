@@ -1,8 +1,10 @@
-# React + Vite
+🚀 **FixMyResume** is an ATS-optimized resume enhancer that helps job seekers tailor their resumes to job descriptions for better chances of getting shortlisted.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 🖥️ Live Demo
+🔗 [fixmyresume.rishirajsarkar.in](https://fixmyresume.rishirajsarkar.in)
 
-Currently, two official plugins are available:
+## 🛠️ Tech Stack
+- **Frontend:** React.js, Tailwind css
+- **State Management:** React Context API
+- **API Integration:** Axios
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
