@@ -16,10 +16,9 @@ const LandingPage = () => {
   }, []);
 
   const userImages = [
-    "./user01.jpg",
-    "./user02.jpg",
-    "./user03.jpg",
-    
+    "./images/user-image-01.jpg",
+    "./images/user-image-02.jpg",
+    "./images/user-image-03.jpg",
   ];
 
   const testimonials = [
@@ -27,21 +26,21 @@ const LandingPage = () => {
       name: "Sarah Johnson",
       role: "Software Engineer",
       content: "The AI suggestions perfectly highlighted my skills for tech roles. Received 3 interview requests within a week!",
-      avatar: "./user01.jpg",
+      avatar:  "./images/user-image-01.jpg",
       rating: 5
     },
     {
       name: "Michael Chen",
       role: "Marketing Specialist",
       content: "Completely transformed my generic resume into a targeted application. The difference was night and day.",
-      avatar: "./user02.jpg",
+      avatar:  "./images/user-image-02.jpg",
       rating: 5
     },
     {
       name: "Jessica Wright",
       role: "Project Manager",
       content: "The ATS optimization feature alone is worth it. Finally getting past those automatic filters!",
-      avatar: "./user03.jpg",
+      avatar:  "./images/user-image-03.jpg",
       rating: 4
     }
   ];
@@ -171,7 +170,7 @@ const LandingPage = () => {
               <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl blur opacity-30"></div>
               <div className="relative bg-white p-4 rounded-2xl shadow-xl overflow-hidden">
                 <img 
-                  src="./image01.jpg" 
+                  src="./images/header-image-01.jpg" 
                   alt="AI Resume Enhancement" 
                   className="w-full rounded-lg"
                 />
@@ -469,7 +468,7 @@ const LandingPage = () => {
                 <div className="bg-blue-600 text-white rounded-lg p-2">
                   <FileText className="w-5 h-5" />
                 </div>
-                <span className="font-bold text-xl text-blue-600">ResumeAI</span>
+                <span className="font-bold text-xl text-blue-600">FixMyResume</span>
               </div>
               <p className="text-gray-600 mb-4">
                 AI-powered resume enhancement platform that helps job seekers land more interviews.
@@ -509,7 +508,7 @@ const LandingPage = () => {
           
           <div className="pt-8 border-t border-gray-200 text-center">
             <p className="text-gray-600 text-sm">
-              © {new Date().getFullYear()} ResumeAI. All rights reserved.
+              © {new Date().getFullYear()} FixMyResume. All rights reserved.
             </p>
           </div>
         </div>
