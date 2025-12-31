@@ -137,6 +137,10 @@ const LandingPage = () => {
               </motion.button>
 
               <motion.button
+              onClick={ () => {
+                window.open("https://www.linkedin.com/posts/rishiraj-sarkar_tailoring-my-resume-for-every-job-application-activity-7295059754270302208-sd66?utm_source=share&utm_medium=member_desktop&rcm=ACoAADM7fYgBHKBTkJlkvETubpEJUsuDP0tZzQY", "_blank")
+              }
+            }
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 className="px-6 py-3 bg-white hover:bg-gray-50 text-blue-600 border border-blue-200 rounded-lg font-medium flex items-center justify-center gap-2"
